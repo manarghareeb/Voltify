@@ -1,0 +1,2 @@
+F:/Flutter Projects/voltify/voltify/android/app/.cxx/Debug/2y2rq6n5/armeabi-v7a/CMakeFiles/edit_cache.dir
+F:/Flutter Projects/voltify/voltify/android/app/.cxx/Debug/2y2rq6n5/armeabi-v7a/CMakeFiles/rebuild_cache.dir
