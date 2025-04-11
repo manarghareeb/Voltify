@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../const_themes.dart';
 import '../widgets/devices_card_test.dart';
 
-class HomeScreen extends StatelessWidget {
+class DeviceScreen extends StatelessWidget {
   final List<String> rooms = ['Living Room', 'Bedroom', 'Kitchen'];
 
   @override
