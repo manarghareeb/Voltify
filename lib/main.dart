@@ -36,6 +36,7 @@ class VoltifyApp extends StatefulWidget {
 }
 
 class _VoltifyAppState extends State<VoltifyApp> {
+  String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
   @override
   void initState() {
     super.initState();
@@ -62,7 +63,7 @@ class _VoltifyAppState extends State<VoltifyApp> {
           create: (context) => ProfileCubit(),
         ),
         BlocProvider(
-          create: (context) => BalanceCubit()..loadBalance(),
+          create: (context) => BalanceCubit(userId)..loadBalance(),
         ),
         BlocProvider(
           create: (context) => DevicesCubit(),

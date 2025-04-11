@@ -55,7 +55,7 @@ class RechargeCard extends StatelessWidget {
               }
 
               return Text(
-                'Current Balance: ${balance.toStringAsFixed(2)}EGP',
+                'Current Balance: ${balance.toStringAsFixed(2)} EGP',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: ScreenSize.width * 0.04,
@@ -99,44 +99,42 @@ class RechargeCard extends StatelessWidget {
                 double? amount = double.tryParse(amountController.text);
 
                 if (amount != null && amount > 0) {
-                  print("Recharging with: $amount");
+                  try {
+                    context.read<BalanceCubit>().rechargeBalance(amount);
+                    amountController.clear();
 
-
-                  context.read<BalanceCubit>().rechargeBalance(amount);
-                  amountController.clear();
-
-
-                  Future.delayed(Duration(milliseconds: 300), () {
-                    if (context.mounted) {
-
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Icon(Icons.check_circle,
-                              color: AppTheme.kSecondaryColor, size: 50),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Recharge Successful!'),
+                    Future.delayed(Duration(milliseconds: 300), () {
+                      if (context.mounted) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Icon(Icons.check_circle,
+                                color: AppTheme.kSecondaryColor, size: 50),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Recharge Successful!'),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
                             ],
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pop();
-                                if (Navigator.of(context).canPop()) {
-                                  Navigator.of(context)
-                                      .pop();
-                                }
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  });
+                        ).then((_) {
+                          onRecharge(amount);
+                        });
+                      }
+                    });
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Recharge failed: $e')),
+                    );
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Please enter a valid amount')),

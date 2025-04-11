@@ -51,39 +51,34 @@ class _RechargeButtonState extends State<RechargeButton>
     });
   }
 
-  void _chargeAccount(double amount) {
-  String rawAmount = _amountController.text;
-  print("Entered value before processing: '$rawAmount'");
+  void _chargeAccount() {
+    String rawAmount = _amountController.text;
+    print("Entered value before processing: '$rawAmount'");
 
-  String formattedAmount = rawAmount.trim().replaceAll('،', '.');
-  print("Entered value after formatting: '$formattedAmount'");
+    String formattedAmount = rawAmount.trim().replaceAll('،', '.');
+    print("Entered value after formatting: '$formattedAmount'");
 
-  if (formattedAmount.isEmpty || double.tryParse(formattedAmount) == null) {
-    print("⚠️ Error: Invalid number");
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Please enter a valid amount"),
-        backgroundColor: Colors.red,
-      ),
-    );
-    return;
+    if (formattedAmount.isEmpty || double.tryParse(formattedAmount) == null) {
+      print("Invalid amount entered!");
+      return; // Return if the amount is invalid
+    }
+
+    double rechargeAmount = double.parse(formattedAmount);
+    print("Valid amount, recharging with: $rechargeAmount");
+
+    _amountController.clear();
+
+    if (isCardVisible) {
+      _controller.reverse().then((_) {
+        if (mounted) {
+          setState(() {
+            isCardVisible = false;
+          });
+        }
+      });
+    }
   }
 
-  double rechargeAmount = double.parse(formattedAmount);
-  print("Valid amount, recharging with: $rechargeAmount");
-
-  _amountController.clear();
-
-  if (isCardVisible) {
-    _controller.reverse().then((_) {
-      if (mounted) {
-        setState(() {
-          isCardVisible = false;
-        });
-      }
-    });
-  }
-}
   @override
   Widget build(BuildContext context) {
     ScreenSize.intial(context);
@@ -111,7 +106,10 @@ class _RechargeButtonState extends State<RechargeButton>
                 );
               },
               child: RechargeCard(
-                onRecharge: _chargeAccount,
+                onRecharge: (amount) {
+                  _chargeAccount();
+                  _toggleCard(); 
+                },
                 amountController: _amountController,
               ),
             ),
