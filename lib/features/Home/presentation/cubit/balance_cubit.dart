@@ -89,7 +89,7 @@ void rechargeBalance(double amount) async {
       }
 
       double currentBalance = (userSnapshot.data() as Map<String, dynamic>)?['balance'] ?? 0.0;
-      double newBalance = amount;
+      double newBalance = amount ;
 
       transaction.update(userRef, {'balance': newBalance});
 
